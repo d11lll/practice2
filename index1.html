@@ -170,7 +170,7 @@
     .registration-footer {
       padding: 8px 32px 32px;
       display: flex;
-      justify-content: flex-start; /* Изменено с flex-end на flex-start */
+      justify-content: flex-start; 
       gap: 16px;
     }
 
@@ -286,7 +286,6 @@
   </div>
 
   <script>
-    // Управление друзьями
     const friends = [];
     const maxFriends = 3;
     const addFriendBtn = document.getElementById('addFriendBtn');
@@ -348,12 +347,10 @@
       });
     }
 
-    // Закрытие формы
     document.querySelector('.close-btn').addEventListener('click', () => {
       alert('Форма закрыта');
     });
 
-    // Обработка формы
     document.getElementById('registrationForm').addEventListener('submit', function(e) {
       e.preventDefault();
       alert('Форма отправлена!');
