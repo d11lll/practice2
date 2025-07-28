@@ -99,7 +99,7 @@
       line-height: 143%;
       letter-spacing: -0.01em;
       background: var(--primary-bg);
-      color: var(--secondary-color);
+      color: var(--text-color);
     }
 
     .form-input::placeholder {
@@ -112,6 +112,7 @@
       background-repeat: no-repeat;
       background-position: right 8px center;
       background-size: 16px;
+      color: var(--secondary-color);
     }
 
     .add-friend-btn {
@@ -170,7 +171,7 @@
     .registration-footer {
       padding: 8px 32px 32px;
       display: flex;
-      justify-content: flex-start; 
+      justify-content: flex-start;
       gap: 16px;
     }
 
@@ -281,17 +282,26 @@
     
     <div class="registration-footer">
       <button class="btn btn-back">Назад</button>
-      <button class="btn btn-next">Дальше</button>
+      <button class="btn btn-next" id="nextBtn">Дальше</button>
     </div>
   </div>
 
   <script>
+    document.querySelectorAll('input[type="tel"]').forEach(input => {
+      input.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length > 11) value = value.substring(0, 11);
+        this.value = '+7 ' + value.substring(1, 4) + ' ' + value.substring(4, 7) + ' ' + value.substring(7, 11);
+      });
+    });
+
     const friends = [];
     const maxFriends = 3;
     const addFriendBtn = document.getElementById('addFriendBtn');
     const friendFields = document.getElementById('friendFields');
     const friendsList = document.getElementById('friendsList');
     const saveFriendBtn = document.getElementById('saveFriendBtn');
+    const nextBtn = document.getElementById('nextBtn');
 
     addFriendBtn.addEventListener('click', () => {
       if (friends.length >= maxFriends) {
@@ -314,6 +324,10 @@
       friends.push({ name, email, phone });
       updateFriendsList();
       
+      document.getElementById('friendName').value = '';
+      document.getElementById('friendEmail').value = '';
+      document.getElementById('friendPhone').value = '';
+      friendFields.style.display = 'none';
     });
 
     function updateFriendsList() {
@@ -347,13 +361,29 @@
       });
     }
 
-    document.querySelector('.close-btn').addEventListener('click', () => {
-      alert('Форма закрыта');
+    nextBtn.addEventListener('click', () => {
+      const form = document.getElementById('registrationForm');
+      const requiredInputs = form.querySelectorAll('[required]');
+      let isValid = true;
+      
+      requiredInputs.forEach(input => {
+        if (!input.value) {
+          input.style.borderColor = 'red';
+          isValid = false;
+        } else {
+          input.style.borderColor = '';
+        }
+      });
+      
+      if (isValid) {
+        alert('Форма успешно отправлена!');
+      } else {
+        alert('Заполните все обязательные поля');
+      }
     });
 
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Форма отправлена!');
+    document.querySelector('.close-btn').addEventListener('click', () => {
+      alert('Форма закрыта');
     });
   </script>
 </body>
